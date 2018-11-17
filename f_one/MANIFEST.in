@@ -1,0 +1,3 @@
+graft f_one/templates
+graft f_one/static
+include f_one/schema.sql
