@@ -1,7 +1,7 @@
 
-## view
+{## view
 
-## flash(u'Incorrect username', 'error')
+## flash(u'Incorrect username', 'error') #}
 
 
 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -11,5 +11,22 @@
         <li class="{{ category }}">{{ message }}</li>
         {% endfor %}
     </ul>
+    {% endif %}
+{% endwith %}
+
+
+{# render each category separately #}
+
+{% with messages = get_flashed_messages(category_filter=['error']) %}
+
+    {% if messages %}
+        <div class="alert-message">
+            <a href="path-to-error-page">something here</a> 
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul> 
+        </div>
     {% endif %}
 {% endwith %}
