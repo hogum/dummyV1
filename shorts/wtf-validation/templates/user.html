@@ -9,6 +9,11 @@
 <body>
     {% block body %}
     <h2>It works {% if name %} {{ name }} {% else %} Man {% endif %}!</h2>
+            <ul>
+                {% for message in get_flashed_messages() %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
         <form method="post" accept-charset="utf-8">
             {{form.csrf_token}}
             <dl>
