@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Form</title>
+    <link rel="stylesheet" href="">
+</head>
+<body>
+    {% block body %}
+    <h2>It works {% if name %} {{ name }} {% else %} Man {% endif %}!</h2>
+        <form method="post" accept-charset="utf-8">
+            {{form.csrf_token}}
+            <dl>
+                <dt>{{ form.name.label }}</dt>
+                <dd> {{ form.name }}</dd>
+                <dt>{{ form.email.label }}</dt>
+           
+                <dd>{{ form.email }}</dd>
+            </br>
+                <dd>{{ form.submit }}</dd>
+            </dl>
+        </form>
+
+    {% endblock %}
+</body>
+</html>
