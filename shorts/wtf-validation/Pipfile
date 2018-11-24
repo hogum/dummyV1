@@ -7,6 +7,10 @@ name = "pypi"
 flask-wtf = "*"
 wtform = "*"
 wtforms = "*"
+flask-sqlalchemy = "*"
+"psycopg2" = "*"
+"psycopg2-binary" = "*"
+flask-migrate = "*"
 
 [dev-packages]
 

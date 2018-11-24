@@ -1,18 +1,32 @@
 from flask import Flask, render_template, url_for, redirect, session
 from form_validate import Contact
+from flask_migrate import Migrate
 
-from models import User
-from base import Base, Session
+from models import User, Role
+from base import Base, Session, engine
 
-Base.metadata.create_all()
+Base.metadata.create_all(engine)
 dbsession = Session()
 
 app = Flask(__name__)
 app.config.update(
-    SECRET_KEY='development key')
+    SECRET_KEY='development key',
+    SQLALCHEMY_DATABASE_URI='postgresql://postgres:pass@localhost:5432/dummy')
+
+
+migrate = Migrate(app, dbsession)
 
 
 @app.route('/form', methods=['GET', 'POST'])
+@app.shell_context_processor
+def make_shell_context():
+    return dict(app=app,
+                db=dbsession,
+                User=User,
+                Role=Role
+                )
+
+
 def contact():
 
     form = Contact()
