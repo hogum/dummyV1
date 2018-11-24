@@ -9,6 +9,14 @@
 <body>
     {% block body %}
     <h2>It works {% if name %} {{ name }} {% else %} Man {% endif %}!</h2>
+    <div class="header-msg">
+        {% if not exists %}
+            <p> Welcome on board </p>
+        {% else %}
+            <p>Welcome back</p>
+        {% endif %}
+
+    </div>
             <ul class="alert">
                 {% for message in get_flashed_messages() %}
                 <li>
