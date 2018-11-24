@@ -12,6 +12,9 @@ class User(Base):
     email = Column(String, unique=True)
     role_id = Column(Integer, ForeignKey('roles.id'))
 
+    def __init__(self, name):
+        self.name = name
+
 
 class Role(Base):
     __tablename__ = 'roles'

@@ -22,7 +22,7 @@ migrate = Migrate(app, db)
 @app.shell_context_processor
 def make_shell_context():
     return dict(app=app,
-                db=db,
+                db=dbsession,
                 User=User,
                 Role=Role
                 )
@@ -33,17 +33,20 @@ def contact():
 
     form = Contact()
     if form.validate_on_submit():
-        user = dbsession.query(User).filter_by(name=form.name.data)
+        user = dbsession.query(User).filter(
+            User.name == form.name.data).first()
         if user is None:
+            user_name = form.name.data
+            user = User(user_name)
             dbsession.add(user)
+            dbsession.commit()
             session['exists'] = False
-
-        name_ = user
-        if name_ != form.name.data:
-            flash('Changed your name already?')
 
         else:
             session['exists'] = True
+            name_ = user.name
+            if name_ != form.name.data:
+                flash('Changed your name already?')
         session['name'] = form.name.data
 
         return redirect(url_for('contact'))
