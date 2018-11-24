@@ -1,6 +1,7 @@
-from flask import Flask, render_template, url_for, redirect, session
+from flask import Flask, render_template, url_for, redirect, session, flash
 from form_validate import Contact
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 from models import User, Role
 from base import Base, Session, engine
@@ -13,33 +14,34 @@ app.config.update(
     SECRET_KEY='development key',
     SQLALCHEMY_DATABASE_URI='postgresql://postgres:pass@localhost:5432/dummy')
 
+db = SQLAlchemy(app)
 
-migrate = Migrate(app, dbsession)
+migrate = Migrate(app, db)
 
 
-@app.route('/form', methods=['GET', 'POST'])
 @app.shell_context_processor
 def make_shell_context():
     return dict(app=app,
-                db=dbsession,
+                db=db,
                 User=User,
                 Role=Role
                 )
 
 
+@app.route('/form', methods=['GET', 'POST'])
 def contact():
 
     form = Contact()
     if form.validate_on_submit():
-        user = User.query.filter_by(name=form.name.data)
+        user = dbsession.query(User).filter_by(name=form.name.data)
         if user is None:
             dbsession.add(user)
             session['exists'] = False
-            """
-            name_ = session.get('name')
+
+        name_ = user
         if name_ != form.name.data:
             flash('Changed your name already?')
-        """
+
         else:
             session['exists'] = True
         session['name'] = form.name.data
